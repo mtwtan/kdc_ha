@@ -1,0 +1,34 @@
+[libdefaults]
+    default_realm = <KDC REALM>
+    dns_lookup_realm = false
+    dns_lookup_kdc = false
+    rdns = false
+    ticket_lifetime = 24h
+    forwardable = true
+    udp_preference_limit = 1000000
+    default_tkt_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 des3-cbc-sha1
+    default_tgs_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 des3-cbc-sha1
+    permitted_enctypes = aes256-cts-hmac-sha1-96 aes128-cts-hmac-sha1-96 des3-cbc-sha1
+
+[realms]
+    <KDC REALM> = {
+        kdc = <master kdc>:88
+        kdc = <secondary kdc>:88
+        admin_server = <master kdc>:749
+        default_domain = <kdc realm lower case>
+    }
+    <AD REALM> = {
+        kdc = <ad realm lower case>
+        admin_server = <ad realm lower case>
+        default_domain = <ad realm lower case>
+    }
+
+[domain_realm]
+    .<kdc realm lower case> = <KDC REALM>
+     <kdc realm lower case> = <KDC REALM>
+    .<ad realm lower case> = <AD REALM>
+     <ad realm lower case> = <AD REALM>
+[logging]
+    kdc = FILE:/var/log/kerberos/krb5kdc.log
+    admin_server = FILE:/var/log/kerberos/kadmin.log
+    default = FILE:/var/log/kerberos/krb5lib.log
